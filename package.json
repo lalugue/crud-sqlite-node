@@ -1,0 +1,15 @@
+{
+  "name": "crud-sqlite-node",
+  "version": "1.0.0",
+  "description": "a CRUD backend for SQLite in Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lalugue",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2"
+  }
+}
