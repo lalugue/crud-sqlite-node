@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const mongoose = require('mongoose')
 const constants = require('./constants')
 
 app.use(cors())
@@ -19,7 +18,6 @@ app.use(bodyParser.json())
         ***** Express Setup Part *****
 */
 
-let Todo = require('./todo.model')
 
 //define the routes
 const todoRoutes = express.Router()
