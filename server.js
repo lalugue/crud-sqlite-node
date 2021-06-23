@@ -1,8 +1,10 @@
 const express = require('express')
 const app = express()
+const sqlite3 = require('sqlite3')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const constants = require('./constants')
+
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -12,7 +14,11 @@ app.use(bodyParser.json())
         ****** SQLite Setup Part *****
 */
 
-
+let db = new sqlite3.Database(':memory:', (err) => {
+    if(err){
+        console.log(err)
+    }
+})
 
 /*
         ***** Express Setup Part *****
