@@ -38,10 +38,10 @@ let db = new sqlite3.Database('./db/todos.db', (err) => {
 const todoRoutes = express.Router()
 
 //Read all entries
-//upon access of '/' in browser..
+//upon access of '/todos' in browser..
 todoRoutes.route('/').get((req,res)=> {
 
-    //find Todo entries in database
+    //get all Todo entries in database
     let sql = `SELECT * FROM todos`
     db.all(sql, [], (err, rows)=>{
         if(err){
@@ -61,15 +61,13 @@ todoRoutes.route('/:id').get((req,res)=>{
     //example route: localhost:4000/todos/f7b5b3ce30704b58be5399a5afb5814a
     console.log("route: /:id")
     let id = req.params.id
-    let sql = `SELECT * FROM todos WHERE id="${id}"`
-    console.log(sql)
+    let sql = `SELECT * FROM todos WHERE id="${id}"`    
     
     db.all(sql, [], (err, rows)=>{
         if(err){
             console.log("error in read by id")
             console.log(err)
-        }  
-        console.log(rows)      
+        }          
         res.json(rows) //print result in json form
     })
 })
