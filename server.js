@@ -42,13 +42,12 @@ const todoRoutes = express.Router()
 todoRoutes.route('/').get((req,res)=> {
 
     //find Todo entries in database
-    let sql = "SELECT * FROM todos"
+    let sql = `SELECT * FROM todos`
     db.all(sql, [], (err, rows)=>{
         if(err){
             console.log("error in read")
             console.log(err)
-        }
-        console.log(rows)
+        }        
         res.json(rows) //print result in json form
     })
    
