@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const constants = require('./constants')
+const model = require('./model')
 
 
 app.use(cors())
@@ -14,11 +15,19 @@ app.use(bodyParser.json())
         ****** SQLite Setup Part *****
 */
 
-let db = new sqlite3.Database(':memory:', (err) => {
+let db = new sqlite3.Database('./db/todos.db', (err) => {
     if(err){
         console.log(err)
     }
+    console.log("Connected to database")
+    db.all(model.table, [], (err, rows)=>{
+        if(err){
+            console.log("error while accessing table")
+        }
+    })
 })
+
+
 
 /*
         ***** Express Setup Part *****
@@ -31,18 +40,19 @@ const todoRoutes = express.Router()
 //Read all entries
 //upon access of '/' in browser..
 todoRoutes.route('/').get((req,res)=> {
-   
-    //find Todo entry in database
-    Todo.find({todo_deleted: {$ne: true}},(err, todos)=> {
-        if (err) {
-            console.log("An error occurred while finding a Todo in the database: ")
+
+    //find Todo entries in database
+    let sql = "SELECT * FROM todos"
+    db.all(sql, [], (err, rows)=>{
+        if(err){
+            console.log("error in read")
             console.log(err)
         }
-        else {
-            console.log("fetching todos/ succcessful")
-            res.json(todos) //print result in json form
-        }
+        console.log(rows)
+        res.json(rows) //print result in json form
     })
+   
+    
     
     
 })
