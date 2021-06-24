@@ -74,17 +74,20 @@ todoRoutes.route('/:id').get((req,res)=>{
 
 //Create a new entry
 todoRoutes.route('/add').post((req,res)=>{
-    let todo = new Todo(req.body)
+    //let todo = new Todo(req.body)
+    let sql = `INSERT INTO todos`
     
     console.log('data to be inserted is: ')
     console.log(req.body)
-    todo.save()
+    /*todo.save()
         .then(todo => {
             res.status(200).json({'todo':'todo added successfully!'})
         })
         .catch(err => {
             res.status(400).send('adding new todo failed!')
-        })
+        })*/
+
+    return res.status(200).json({'todo':'todo added successfully!'})
         
 })
 
