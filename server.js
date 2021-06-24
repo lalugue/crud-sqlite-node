@@ -77,7 +77,7 @@ todoRoutes.route('/:id').get((req,res)=>{
 todoRoutes.route('/add').post((req,res)=>{
    
     let todo = {...req.body}
-    todo.id = uuidv4();    
+    todo.id = uuidv4().replace(/-/g,'');    
     
     let sql = `INSERT INTO todos(id, todo_description, todo_responsible, todo_priority, todo_completed)
                 VALUES (?,?,?,?,?)`
