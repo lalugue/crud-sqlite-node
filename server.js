@@ -3,6 +3,7 @@ const app = express()
 const sqlite3 = require('sqlite3')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const { v4: uuidv4 } = require('uuid');
 const constants = require('./constants')
 const model = require('./model')
 
@@ -74,11 +75,23 @@ todoRoutes.route('/:id').get((req,res)=>{
 
 //Create a new entry
 todoRoutes.route('/add').post((req,res)=>{
-    //let todo = new Todo(req.body)
-    let sql = `INSERT INTO todos`
+   
+    let todo = {...req.body}
+    todo.id = uuidv4();    
     
-    console.log('data to be inserted is: ')
-    console.log(req.body)
+    let sql = `INSERT INTO todos(id, todo_description, todo_responsible, todo_priority, todo_completed)
+                VALUES (?,?,?,?,?)`
+    let todoValues = [todo.id, todo.todo_description, todo.todo_responsible, todo.todo_priority, todo.todo_completed]
+    //let data = `["${uuidv4()}", "${body.todo_description, "${todo_responsible, "${todo_priority, "${todo_completed]`
+
+    db.run(sql, todoValues, (err)=>{
+        if (err) {          
+          res.status(400).send('adding new todo failed!')
+        }
+        return res.status(200).json({'todo':'todo added successfully!'})
+    });
+    
+
     /*todo.save()
         .then(todo => {
             res.status(200).json({'todo':'todo added successfully!'})
@@ -87,7 +100,7 @@ todoRoutes.route('/add').post((req,res)=>{
             res.status(400).send('adding new todo failed!')
         })*/
 
-    return res.status(200).json({'todo':'todo added successfully!'})
+    
         
 })
 
