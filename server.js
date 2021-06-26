@@ -116,7 +116,16 @@ todoRoutes.route('/update/:id').post((req,res)=>{
                 todo_completed = (?)
                 WHERE id = (?)`
     
-    Todo.findById(req.params.id, (err,todo)=>{
+    let todoValues = [todo.todo_description, todo.todo_responsible, todo.todo_priority, todo.todo_completed, todo.id]
+
+    db.run(sql, todoValues, (err)=>{
+        if (err) {          
+          res.status(400).send('an error occurred in updating')
+        }
+        return res.status(200).json({'todo':'todo updated successfully!'})
+    });
+            
+    /*Todo.findById(req.params.id, (err,todo)=>{
         if(!todo){
             res.status(404).send("the todo was not found")
         }
@@ -133,7 +142,7 @@ todoRoutes.route('/update/:id').post((req,res)=>{
                 res.status(400).send("an error occurred in updating")
             })
         }
-    })
+    })*/
 })
 
 //Delete an entry
