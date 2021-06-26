@@ -58,8 +58,8 @@ todoRoutes.route('/').get((req,res)=> {
 })
 
 //Read a specific entry
-todoRoutes.route('/:id').get((req,res)=>{
-    //example route: localhost:4000/todos/f7b5b3ce30704b58be5399a5afb5814a
+//example route: localhost:4000/todos/f7b5b3ce30704b58be5399a5afb5814a
+todoRoutes.route('/:id').get((req,res)=>{    
     console.log("route: /:id")
     let id = req.params.id
     let sql = `SELECT * FROM todos WHERE id="${id}"`    
@@ -82,29 +82,18 @@ todoRoutes.route('/add').post((req,res)=>{
     let sql = `INSERT INTO todos(id, todo_description, todo_responsible, todo_priority, todo_completed)
                 VALUES (?,?,?,?,?)`
     let todoValues = [todo.id, todo.todo_description, todo.todo_responsible, todo.todo_priority, todo.todo_completed]
-    //let data = `["${uuidv4()}", "${body.todo_description, "${todo_responsible, "${todo_priority, "${todo_completed]`
+    
 
     db.run(sql, todoValues, (err)=>{
         if (err) {          
           res.status(400).send('adding new todo failed!')
         }
         return res.status(200).json({'todo':'todo added successfully!'})
-    });
-    
-
-    /*todo.save()
-        .then(todo => {
-            res.status(200).json({'todo':'todo added successfully!'})
-        })
-        .catch(err => {
-            res.status(400).send('adding new todo failed!')
-        })*/
-
-    
-        
+    });       
 })
 
 //Update an entry
+//example route: localhost:4000/todos/update/f7b5b3ce30704b58be5399a5afb5814a
 todoRoutes.route('/update/:id').post((req,res)=>{
     console.log("update data: ")
     console.log(req.body)
@@ -126,25 +115,6 @@ todoRoutes.route('/update/:id').post((req,res)=>{
         }
         return res.status(200).json({'todo':'todo updated successfully!'})
     });
-            
-    /*Todo.findById(req.params.id, (err,todo)=>{
-        if(!todo){
-            res.status(404).send("the todo was not found")
-        }
-        else{
-            todo.todo_description = req.body.todo_description
-            todo.todo_responsible = req.body.todo_responsible
-            todo.todo_priority = req.body.todo_priority
-            todo.todo_completed = req.body.todo_completed
-
-            todo.save().then(todo => {
-                res.json('todo updated!')
-            })
-            .catch(err => {
-                res.status(400).send("an error occurred in updating")
-            })
-        }
-    })*/
 })
 
 //Delete an entry
