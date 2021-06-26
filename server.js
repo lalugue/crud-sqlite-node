@@ -106,6 +106,15 @@ todoRoutes.route('/add').post((req,res)=>{
 
 //Update an entry
 todoRoutes.route('/update/:id').post((req,res)=>{
+
+    let todo = {...req.body}
+
+    let sql = `UPDATE todos
+                SET todo_description = (?),
+                todo_responsible = (?),
+                todo_priority = (?),
+                todo_completed = (?)
+                WHERE id = (?)`
     
     Todo.findById(req.params.id, (err,todo)=>{
         if(!todo){
