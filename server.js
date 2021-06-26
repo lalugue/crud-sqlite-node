@@ -106,9 +106,11 @@ todoRoutes.route('/add').post((req,res)=>{
 
 //Update an entry
 todoRoutes.route('/update/:id').post((req,res)=>{
+    console.log("update data: ")
+    console.log(req.body)
 
     let todo = {...req.body}
-
+    todo.id = req.params.id
     let sql = `UPDATE todos
                 SET todo_description = (?),
                 todo_responsible = (?),
