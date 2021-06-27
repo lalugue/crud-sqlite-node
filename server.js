@@ -119,8 +119,12 @@ todoRoutes.route('/update/:id').post((req,res)=>{
 
 //Delete an entry
 todoRoutes.route('/delete/:id').post((req,res)=>{
+    let todo;
+    todo.id = req.params.id
+    todo.todo_deleted = 1;
+    
 
-    Todo.findById(req.params.id, (err,todo)=>{
+    /*Todo.findById(req.params.id, (err,todo)=>{
         if(!todo){
             res.status(404).send("the todo was not found")
         }
@@ -134,7 +138,7 @@ todoRoutes.route('/delete/:id').post((req,res)=>{
                 res.status(400).send("an error occurred in updating")
             })          
         }
-    })
+    })*/
  })
 
 
