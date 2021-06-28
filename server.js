@@ -145,7 +145,7 @@ todoRoutes.route('/delete/:id').delete((req, res) => {
         }
         return res.status(200).json({ 'todo': 'todo deleted successfully!' });
     });
-})
+});
 
 
 //after defining the routes, use the routes
