@@ -40,6 +40,7 @@ const todoRoutes = express.Router()
 
 //Read all entries
 //upon access of '/todos' in browser..
+//example route: localhost:4000/todos
 todoRoutes.route('/').get((req,res)=> {
 
     //get all Todo entries in database
@@ -74,6 +75,15 @@ todoRoutes.route('/:id').get((req,res)=>{
 })
 
 //Create a new entry
+//example route: localhost:4000/todos/add
+/* example body:
+{
+	"todo_description": "add my todo",
+	"todo_responsible": "me",
+	"todo_priority": "MEDIUM",
+	"todo_completed": 0
+}
+*/
 todoRoutes.route('/add').post((req,res)=>{
    
     let todo = {...req.body}
@@ -94,6 +104,14 @@ todoRoutes.route('/add').post((req,res)=>{
 
 //Update an entry
 //example route: localhost:4000/todos/update/f7b5b3ce30704b58be5399a5afb5814a
+/* example body:
+{
+	"todo_description": "relax",
+	"todo_responsible": "",
+	"todo_priority": "LOW",
+	"todo_completed": 0
+}
+*/
 todoRoutes.route('/update/:id').post((req,res)=>{
     console.log("update data: ")
     console.log(req.body)
@@ -118,6 +136,7 @@ todoRoutes.route('/update/:id').post((req,res)=>{
 })
 
 //Delete an entry
+//example route: localhost:4000/todos/delete/b75d8e5a7b77482ba82c61a424753aaf
 todoRoutes.route('/delete/:id').delete((req,res)=>{
     let todo = {};
     todo.id = req.params.id
