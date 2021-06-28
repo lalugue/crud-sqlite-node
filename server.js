@@ -17,13 +17,13 @@ app.use(bodyParser.json())
 */
 
 let db = new sqlite3.Database('./db/todos.db', (err) => {
-    if(err){
-        console.log(err)
+    if (err) {
+        console.log(err);
     }
-    console.log("Connected to database")
-    db.all(model.table, [], (err, rows)=>{
-        if(err){
-            console.log("error while accessing table")
+    console.log("Connected to database");
+    db.all(model.table, [], (err, rows) => {
+        if (err) {
+            console.log("error while accessing table");
         }
     })
 })
@@ -36,127 +36,122 @@ let db = new sqlite3.Database('./db/todos.db', (err) => {
 
 
 //define the routes
-const todoRoutes = express.Router()
+const todoRoutes = express.Router();
 
 //Read all entries
 //upon access of '/todos' in browser..
 //example route: localhost:4000/todos
-todoRoutes.route('/').get((req,res)=> {
+todoRoutes.route('/').get((req, res) => {
 
     //get all Todo entries in database
-    let sql = `SELECT * FROM todos WHERE todo_deleted=0`
-    db.all(sql, [], (err, rows)=>{
-        if(err){
-            console.log("error in read")
-            console.log(err)
-        }        
-        res.json(rows) //print result in json form
-    })
-   
-    
-    
-    
-})
+    let sql = `SELECT * FROM todos WHERE todo_deleted=0`;
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            console.log("error in read");
+            console.log(err);
+        }
+        res.json(rows); //return result in json form
+    });
+});
 
 //Read a specific entry
 //example route: localhost:4000/todos/f7b5b3ce30704b58be5399a5afb5814a
-todoRoutes.route('/:id').get((req,res)=>{    
-    console.log("route: /:id")
-    let id = req.params.id
-    let sql = `SELECT * FROM todos WHERE id="${id}" AND todo_deleted=0`    
-    
-    db.all(sql, [], (err, rows)=>{
-        if(err){
-            console.log("error in read by id")
-            console.log(err)
-        }          
-        res.json(rows) //print result in json form
-    })
-})
+todoRoutes.route('/:id').get((req, res) => {
+    console.log("route: /:id");
+    let id = req.params.id;
+    let sql = `SELECT * FROM todos WHERE id="${id}" AND todo_deleted=0`;
+
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            console.log("error in read by id");
+            console.log(err);
+        }
+        res.json(rows); //print result in json form
+    });
+});
 
 //Create a new entry
 //example route: localhost:4000/todos/add
 /* example body:
 {
-	"todo_description": "add my todo",
-	"todo_responsible": "me",
-	"todo_priority": "MEDIUM",
-	"todo_completed": 0
+    "todo_description": "add my todo",
+    "todo_responsible": "me",
+    "todo_priority": "MEDIUM",
+    "todo_completed": 0
 }
 */
-todoRoutes.route('/add').post((req,res)=>{
-   
-    let todo = {...req.body}
-    todo.id = uuidv4().replace(/-/g,'');    
-    
-    let sql = `INSERT INTO todos(id, todo_description, todo_responsible, todo_priority, todo_completed)
-                VALUES (?,?,?,?,?)`
-    let todoValues = [todo.id, todo.todo_description, todo.todo_responsible, todo.todo_priority, todo.todo_completed]
-    
+todoRoutes.route('/add').post((req, res) => {
+    let todo = { ...req.body };
+    todo.id = uuidv4().replace(/-/g, '');
 
-    db.run(sql, todoValues, (err)=>{
-        if (err) {          
-          res.status(400).send('adding new todo failed!')
+    let sql = `INSERT INTO todos(id, todo_description, todo_responsible, todo_priority, todo_completed)
+                VALUES (?,?,?,?,?)`;
+    let todoValues = [todo.id, todo.todo_description, todo.todo_responsible, todo.todo_priority, todo.todo_completed];
+
+
+    db.run(sql, todoValues, (err) => {
+        if (err) {
+            res.status(400).send('adding new todo failed!');
         }
-        return res.status(200).json({'todo':'todo added successfully!'})
-    });       
-})
+        return res.status(200).json({ 'todo': 'todo added successfully!' });
+    });
+});
 
 //Update an entry
 //example route: localhost:4000/todos/update/f7b5b3ce30704b58be5399a5afb5814a
 /* example body:
 {
-	"todo_description": "relax",
-	"todo_responsible": "",
-	"todo_priority": "LOW",
-	"todo_completed": 0
+    "todo_description": "relax",
+    "todo_responsible": "",
+    "todo_priority": "LOW",
+    "todo_completed": 0
 }
 */
-todoRoutes.route('/update/:id').post((req,res)=>{
-    console.log("update data: ")
-    console.log(req.body)
+todoRoutes.route('/update/:id').post((req, res) => {
+    console.log("update data: ");
+    console.log(req.body);
 
-    let todo = {...req.body}
-    todo.id = req.params.id
+    let todo = { ...req.body };
+    todo.id = req.params.id;
     let sql = `UPDATE todos
                 SET todo_description = (?),
                 todo_responsible = (?),
                 todo_priority = (?),
                 todo_completed = (?)
-                WHERE id = (?)`
-    
-    let todoValues = [todo.todo_description, todo.todo_responsible, todo.todo_priority, todo.todo_completed, todo.id]
+                WHERE id = (?)`;
 
-    db.run(sql, todoValues, (err)=>{
-        if (err) {          
-          res.status(400).send('an error occurred in updating')
+    let todoValues = [todo.todo_description, todo.todo_responsible, todo.todo_priority, todo.todo_completed, todo.id];
+
+    db.run(sql, todoValues, (err) => {
+        if (err) {
+            res.status(400).send('an error occurred in updating');
         }
-        return res.status(200).json({'todo':'todo updated successfully!'})
+        return res.status(200).json({ 'todo': 'todo updated successfully!' });
     });
-})
+});
 
 //Delete an entry
 //example route: localhost:4000/todos/delete/b75d8e5a7b77482ba82c61a424753aaf
-todoRoutes.route('/delete/:id').delete((req,res)=>{
+todoRoutes.route('/delete/:id').delete((req, res) => {
     let todo = {};
-    todo.id = req.params.id
+    todo.id = req.params.id;
     todo.todo_deleted = 1;
 
-    let sql = `UPDATE todos SET todo_deleted = 1 WHERE id = (?)`
+    let sql = `UPDATE todos SET todo_deleted = 1 WHERE id = (?)`;
 
-    db.run(sql, todo.id, (err)=>{
-        if (err) {          
-          res.status(400).send('an error occurred in deleted')
+    db.run(sql, todo.id, (err) => {
+        if (err) {
+            res.status(400).send('an error occurred in deleted');
         }
-        return res.status(200).json({'todo':'todo deleted successfully!'})
+        return res.status(200).json({ 'todo': 'todo deleted successfully!' });
     });
- })
+})
 
 
 //after defining the routes, use the routes
-app.use('/todos', todoRoutes)
+app.use('/todos', todoRoutes);
 
 
-app.listen(constants.PORT, ()=> {
-    console.log("Server is running on Port: " + constants.PORT)    
-})
+app.listen(constants.PORT, () => {
+    console.log("Server is running on Port: " + constants.PORT);
+});
