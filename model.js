@@ -9,4 +9,4 @@ const table = `CREATE TABLE IF NOT EXISTS todos (
 
 module.exports = {
     table: table
-}
+};
