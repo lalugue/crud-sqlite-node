@@ -43,7 +43,7 @@ const todoRoutes = express.Router()
 todoRoutes.route('/').get((req,res)=> {
 
     //get all Todo entries in database
-    let sql = `SELECT * FROM todos`
+    let sql = `SELECT * FROM todos WHERE todo_deleted=0`
     db.all(sql, [], (err, rows)=>{
         if(err){
             console.log("error in read")
@@ -62,7 +62,7 @@ todoRoutes.route('/').get((req,res)=> {
 todoRoutes.route('/:id').get((req,res)=>{    
     console.log("route: /:id")
     let id = req.params.id
-    let sql = `SELECT * FROM todos WHERE id="${id}"`    
+    let sql = `SELECT * FROM todos WHERE id="${id}" AND todo_deleted=0`    
     
     db.all(sql, [], (err, rows)=>{
         if(err){
