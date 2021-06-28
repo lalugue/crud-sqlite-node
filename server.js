@@ -118,27 +118,19 @@ todoRoutes.route('/update/:id').post((req,res)=>{
 })
 
 //Delete an entry
-todoRoutes.route('/delete/:id').post((req,res)=>{
-    let todo;
+todoRoutes.route('/delete/:id').delete((req,res)=>{
+    let todo = {};
     todo.id = req.params.id
     todo.todo_deleted = 1;
-    
 
-    /*Todo.findById(req.params.id, (err,todo)=>{
-        if(!todo){
-            res.status(404).send("the todo was not found")
+    let sql = `UPDATE todos SET todo_deleted = 1 WHERE id = (?)`
+
+    db.run(sql, todo.id, (err)=>{
+        if (err) {          
+          res.status(400).send('an error occurred in deleted')
         }
-        else{
-            todo.todo_deleted = true            
-            todo.todo_priority = 'Low'            
-            todo.save().then(todo => {
-                res.json('todo updated!')
-            })
-            .catch(err => {
-                res.status(400).send("an error occurred in updating")
-            })          
-        }
-    })*/
+        return res.status(200).json({'todo':'todo deleted successfully!'})
+    });
  })
 
 
