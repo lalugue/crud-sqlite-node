@@ -107,7 +107,7 @@ todoRoutes.route('/add').post((req, res) => {
     "todo_completed": 0
 }
 */
-todoRoutes.route('/update/:id').post((req, res) => {
+todoRoutes.route('/update/:id').patch((req, res) => {
     console.log("update data: ");
     console.log(req.body);
 
